@@ -5,9 +5,11 @@
 ##how to run
 * [Install nodeJS](https://nodejs.org/en/download/)
 * Download this code
-* CD to the drirectory
+* CD to the directory
 * Type 'npm install'
 * Type 'sudo npm install electron -g'
 * Type 'electron .'
 
-##Sorry for all the steps! This will be a self-contained desktop app soon.
+###Sorry for all the steps! This will be a self-contained desktop app soon.
+
+###OSX only for now
