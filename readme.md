@@ -5,7 +5,7 @@
 ##how to run
 * [Install nodeJS](https://nodejs.org/en/download/)
 * Download this code
-* CD to the directory
+* CD into the directory
 * Type 'npm install'
 * Type 'sudo npm install electron -g'
 * Type 'electron .'
