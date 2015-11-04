@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <title>Media Inspect</title>
+</head>
+
+<body>
+
+    <div align="center">
+    <a id="open-folder" class="waves-effect waves-light btn cyan darken-2">Open File</a><a id="clear" class="waves-effect waves-light btn cyan darken-2">Clear Screen</a>
+    <br>
+    <br>
+    <div class="row" id="main">
+        <div class="col s12 m12">
+          <div class="card light-blue accent-4">
+            <div class="card-content white-text">
+              <h5 id="data"></h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    <link rel="stylesheet" type="text/css" href="css/materialize.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
+    <script>
+    $( document ).ready(function() {
+    $("#main").hide();
+    });
+    $("#open-folder").click(function() {
+    ipc.send('message', 'open');
+    });
+
+    $("#clear").click(function() {
+    $("#main").hide();
+    $('#data').html('');
+
+    });
+    var ipc = require('ipc');
+    ipc.on('data', function(message) {
+        $("#main").show();
+        $("#data").append(message + "<br>");
+        ipc.send('message', 'recieved');
+    });
+
+    var ipc = require('ipc');
+    ipc.on('header', function(message) {
+        $("#data").append(message + "<br>");
+        ipc.send('message', 'recieved');
+    });
+    
+    </script>
+</body>
+
+</html>

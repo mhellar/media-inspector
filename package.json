@@ -1,0 +1,19 @@
+{
+  "name": "sha1-maker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "checksum": "^0.1.1",
+    "gaze": "^0.5.2",
+    "graceful-fs": "^4.1.2",
+    "hashsum": "0.0.1",
+    "pixl-xml": "^1.0.4",
+    "sha1-file": "^1.0.0"
+  }
+}
