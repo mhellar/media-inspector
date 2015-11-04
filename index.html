@@ -17,6 +17,9 @@
           <div class="card light-blue accent-4">
             <div class="card-content white-text">
               <h5 id="data"></h5>
+                <div id="progress" class="progress">
+      <div class="indeterminate"></div>
+  </div>
             </div>
           </div>
         </div>
@@ -44,6 +47,10 @@
         $("#main").show();
         $("#data").append(message + "<br>");
         ipc.send('message', 'recieved');
+        if (message == "Inspection Complete!"){
+            $("#progress").hide();
+
+        }
     });
 
     var ipc = require('ipc');

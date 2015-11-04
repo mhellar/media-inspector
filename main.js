@@ -1,17 +1,13 @@
 var app = require('app'); // Module to control application life.
 var BrowserWindow = require('browser-window'); // Module to create native browser window.
-app.commandLine.appendSwitch('allow-file-access');
 var ipc = require('ipc');
 var sha1File = require('sha1-file');
 var dialog = require('dialog');
-app.commandLine.appendSwitch('allow-file-access');
 var XML = require('pixl-xml');
-var minfo = 'mediainfo -f --Output=XML ';
+var minfo = './mediainfo -f --Output=XML ';
 var elements = [];
 var exec = require('child_process').exec;
 var fs = require("fs");
-
-
 
 ipc.on('message', function(event, arg) {
     console.log(arg); // prints "ping"
@@ -20,22 +16,22 @@ ipc.on('message', function(event, arg) {
     }
 });
 
+function escapeShellArg (cmd) {
+    return '\'' + cmd.replace(/\'/g, "'\\''") + '\'';
+}
 
 function chooseFile() {
     console.log(dialog.showOpenDialog({
-        properties: ['openFile']
+       properties: [ 'openFile', 'multiSelections' ]
     }, function(filename) {
         console.log(filename[0]);
-        var file = filename[0];
+        var file = escapeShellArg(filename[0]);
         var sumRes = createHash(filename[0]); 
-
+        mainWindow.webContents.send('data',file);
 
         exec(minfo + file, function(error, stdout, stderr) {
+        
         var doc = XML.parse(stdout);
-       
-        // console.log(JSON.stringify(doc));
-        // console.log(JSON.stringify(sumRes));
-        // console.log(JSON.stringify(doc.File.track[0].Commercial_name));
         try {
             if (typeof doc.File.track[0].File_name != undefined) {
                 elements[1] = "Media report for : " + doc.File.track[0].File_name + "." + doc.File.track[0].File_extension + "  \n";
@@ -59,15 +55,6 @@ function chooseFile() {
             var ModDate = "No Data";
         }
         elements[2] = "Checksum Algorithm : SHA-1  \n";
-        // try {
-        //     if (typeof sum !== undefined) {
-        //         elements[3] = "Checksum sum : " + sumRes + "  \n";
-        //         mainWindow.webContents.send('data',sumRes);
-        //     }
-        // } catch (e) {
-        //     console.log(e);
-        //     digest = "No Data";
-        // }
         try {
             if (typeof doc.File.track[0].Writing_application[1] !== undefined) {
                 elements[4] = "Writing Application : " + doc.File.track[0].Writing_application[1] + "  \n";
@@ -122,7 +109,7 @@ function chooseFile() {
             if (typeof doc.File.track[0].Overall_bit_rate[1] !== undefined) {
                 elements[9] = "Bit Rate : " + doc.File.track[0].Overall_bit_rate[1] + "  \n";
                 var bitRate = doc.File.track[0].Overall_bit_rate[1];
-                mainWindow.webContents.send('data',elements[8]);
+                mainWindow.webContents.send('data',elements[9]);
             }
         } catch (e) {
             console.log(e);
@@ -268,6 +255,7 @@ sha1File(file, function (error, sum) {
   if (error) return console.log(error)
   console.log(sum) // 'c8a2e2125f94492082bc484044edb4dc837f83b' 
   mainWindow.webContents.send('data',"sha-1 checksum is: " + sum);
+  mainWindow.webContents.send('data',"Inspection Complete!");
   return sum;
   
 })
@@ -305,6 +293,7 @@ app.on('ready', function() {
 
 
     });
+
 
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
