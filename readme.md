@@ -7,7 +7,7 @@
 * Download this code
 * CD into the directory
 * Type 'npm install'
-* Type 'sudo npm install electron -g'
+* Type 'sudo npm install -g electron-prebuilt'
 * Type 'electron .'
 
 ###Sorry for all the steps! This will be a self-contained desktop app soon.
